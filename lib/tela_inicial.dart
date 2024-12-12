@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'tela_principal.dart'; 
-import 'telacadastro.dart'; 
-import "package:email_validator/email_validator.dart"; 
+import 'tela_principal.dart'; // Aqui você pode manter a navegação para TelaPrincipal
+import 'telacadastro.dart'; // Aqui é para a tela de cadastro
+import 'package:email_validator/email_validator.dart'; // Para validar o email
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -13,6 +13,9 @@ class TelaInicial extends StatefulWidget {
 class _TelaInicialState extends State<TelaInicial> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _senhaFocusNode = FocusNode();
 
   void _login() {
     final String email = _emailController.text;
@@ -46,142 +49,153 @@ class _TelaInicialState extends State<TelaInicial> {
   }
 
   @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _senhaFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Container(
-            // Novo fundo com gradiente suave inspirado em natureza
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFFB2FF59),  // Verde suave
-                  Color(0xFF81C784),  // Verde mais claro, remetendo à natureza
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+      appBar: AppBar(
+        title: const Text('Gestão de Pets - Animus'),
+        backgroundColor: const Color(0xFF3F51B5), // Azul moderno
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Colors.white),
+            onPressed: () {
+              // Ação de notificações
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF3F51B5), Color(0xFF2196F3)], // Gradiente futurista azul
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Imagem logo maior, mas controlada
+              Image.asset(
+                'lib/assets/animus.png',
+                width: 220,  // Logo um pouco maior
+                height: 220,
+                fit: BoxFit.contain,
               ),
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: Image.asset(
-                    'lib/assets/animus.png', // Insira o caminho da sua logo aqui
-                    width: 250,  // Ajuste o tamanho da logo
-                    height: 250,
-                    fit: BoxFit.contain,
-                  ),
+              const SizedBox(height: 20),
+
+              // Títulos menores
+              const Text(
+                'Bem-vindo ao Animus',
+                style: TextStyle(
+                  fontSize: 20,  // Tamanho menor
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
                 ),
-                const SizedBox(height: 16), // Diminuindo o espaçamento entre a logo e o campo de email
-                // Campos de email e senha com bordas arredondadas e detalhes modernos
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: [
-                      // Campo de email
-                      SizedBox(
-                        width: 300,
-                        child: TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            labelStyle: TextStyle(color: Colors.black54, fontSize: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.black.withOpacity(0.2), width: 2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.orangeAccent, width: 2),
-                            ),
-                          ),
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          keyboardType: TextInputType.emailAddress,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      // Campo de senha
-                      SizedBox(
-                        width: 300,
-                        child: TextField(
-                          controller: _senhaController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: 'Senha',
-                            labelStyle: TextStyle(color: Colors.black54, fontSize: 16),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.black.withOpacity(0.2), width: 2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.orangeAccent, width: 2),
-                            ),
-                          ),
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                        ),
-                      ),
-                    ],
-                  ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Sua plataforma de gestão de pets',
+                style: TextStyle(
+                  fontSize: 14,  // Tamanho menor
+                  color: Colors.white70,
+                  letterSpacing: 1.2,
                 ),
-                const SizedBox(height: 32),
-                // Botões de Logar e Cadastrar, lado a lado, com bordas arredondadas
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Botão de login
-                    SizedBox(
-                      width: 130,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orangeAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 6,
-                        ),
-                        onPressed: _login,
-                        child: const Text(
-                          'Logar',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16), // Espaço entre os botões
-                    // Botão de cadastro
-                    SizedBox(
-                      width: 130,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.greenAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 6,
-                        ),
-                        onPressed: _cadastro,
-                        child: const Text(
-                          'Cadastrar',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 30),
+
+              // Campos de Email e Senha
+              _buildInputField(context, 'Email', Icons.email, false, _emailFocusNode),
+              const SizedBox(height: 15),
+              _buildInputField(context, 'Senha', Icons.lock, true, _senhaFocusNode),
+              const SizedBox(height: 25),
+
+            
+              // Botões "Entrar" e "Cadastrar" lado a lado
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildInteractiveButton(context, 'Entrar', Colors.blueAccent, _login, small: true),
+                  const SizedBox(width: 15),
+                  _buildInteractiveButton(context, 'Cadastrar', Colors.greenAccent, _cadastro, small: true),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInputField(BuildContext context, String label, IconData icon, bool obscureText, FocusNode focusNode) {
+    return Container(
+      width: 300,  // Tamanho fixo para os campos de texto
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: label == "Email" ? _emailController : _senhaController,
+        obscureText: obscureText,
+        focusNode: focusNode,
+        style: const TextStyle(color: Colors.black, fontSize: 14),  // Tamanho da fonte reduzido
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.black54, fontSize: 14),  // Tamanho da fonte reduzido
+          prefixIcon: Icon(icon, color: Colors.blueAccent),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),  // Padding ajustado
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(color: const Color.fromARGB(255, 230, 5, 5), width: 2),  // Borda verde neon quando em foco
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInteractiveButton(BuildContext context, String label, Color color, VoidCallback onPressed, {bool small = false}) {
+    return Container(
+      width: small ? 120 : 300,  // Botão com tamanho menor para 'small'
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color, // Aqui substituímos 'primary' por 'backgroundColor'
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20), // Padding ajustado
+          elevation: 5,
+        ),
+        onPressed: onPressed,
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,  // Fonte reduzida
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
       ),

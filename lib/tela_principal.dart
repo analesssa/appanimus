@@ -1,8 +1,8 @@
-import 'package:animus_senai/historicopet.dart';
 import 'package:flutter/material.dart';
 import 'package:animus_senai/cadastrarTutor.dart';
 import 'package:animus_senai/cadastrarUsu.dart';
 import 'package:animus_senai/cadastropets.dart';
+import 'package:animus_senai/historicopet.dart';
 import 'tela_inicial.dart';
 
 class TelaPrincipal extends StatelessWidget {
@@ -11,9 +11,39 @@ class TelaPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bem-vindo ao Animus'),
-        backgroundColor: Colors.orangeAccent[200],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF2196F3), // Azul claro
+                  Color(0xFFFFFFFF), // Branco
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: AppBar(
+              title: const Text('Bem-vindo ao Animus 🐶'),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications, color: Colors.white),
+                  onPressed: () {
+                    // Ação de notificações
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       drawer: Drawer(
         shape: RoundedRectangleBorder(
@@ -23,11 +53,11 @@ class TelaPrincipal extends StatelessWidget {
           ),
         ),
         child: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
               colors: [
-                Color(0xFFB2FF59), // Verde suave
-                Color(0xFF81C784), // Verde mais claro
+                Color(0xFF3F51B5), // Azul futurista
+                Color(0xFF2196F3), // Azul mais claro
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -36,24 +66,35 @@ class TelaPrincipal extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
+              // Imagem no topo do drawer
               const DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 150, 64, 7),
+                  color: Colors.transparent,
                 ),
-                child: Center(
-                  child: Text(
-                    'Menu',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                child: Column(
+                  children: [
+                    Image(
+                      image: AssetImage('lib/assets/animuslogo.jpg'), // A imagem acima do nome
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.contain,
                     ),
-                  ),
+                    SizedBox(height: 5),
+                    Text(
+                      'MENU',
+                      style: TextStyle(
+                        fontSize: 20, // Nome do menu menor
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               _buildDrawerItem(
                 context,
                 title: 'Pets',
+                icon: Icons.pets,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -64,6 +105,7 @@ class TelaPrincipal extends StatelessWidget {
               _buildDrawerItem(
                 context,
                 title: 'Donos',
+                icon: Icons.person,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -74,6 +116,7 @@ class TelaPrincipal extends StatelessWidget {
               _buildDrawerItem(
                 context,
                 title: 'Pets Cadastrados',
+                icon: Icons.list_alt,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -84,6 +127,7 @@ class TelaPrincipal extends StatelessWidget {
               _buildDrawerItem(
                 context,
                 title: 'Histórico Médico',
+                icon: Icons.history,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -94,6 +138,7 @@ class TelaPrincipal extends StatelessWidget {
               _buildDrawerItem(
                 context,
                 title: 'Admin',
+                icon: Icons.admin_panel_settings,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -104,6 +149,7 @@ class TelaPrincipal extends StatelessWidget {
               _buildDrawerItem(
                 context,
                 title: 'Sair',
+                icon: Icons.exit_to_app,
                 onTap: () {
                   _sair(context);
                 },
@@ -113,11 +159,11 @@ class TelaPrincipal extends StatelessWidget {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
             colors: [
-              Color(0xFFB2FF59), // Verde suave
-              Color(0xFF81C784), // Verde mais claro
+              Color(0xFF3F51B5), // Azul futurista
+              Color(0xFF2196F3), // Azul mais claro
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -159,7 +205,7 @@ class TelaPrincipal extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawerItem(BuildContext context, {required String title, required VoidCallback onTap}) {
+  Widget _buildDrawerItem(BuildContext context, {required String title, required IconData icon, required VoidCallback onTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: MouseRegion(
@@ -171,12 +217,13 @@ class TelaPrincipal extends StatelessWidget {
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
               color: Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(30),  // Borda circular
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.white.withOpacity(0.1), // Cor de fundo sutil
+                borderRadius: BorderRadius.circular(30),  // Borda circular
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -185,15 +232,21 @@ class TelaPrincipal extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Center(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+              child: Row(
+                children: [
+                  Icon(icon, color: Colors.white),  // Ícone ao lado do texto
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

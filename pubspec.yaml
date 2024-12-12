@@ -27,3 +27,4 @@ flutter:
   
   assets:
     - lib/assets/animus.png
+    - lib/assets/animuslogo.jpg
