@@ -15,6 +15,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
   final TextEditingController _senhaController = TextEditingController();
   final TextEditingController _confirmarSenhaController =
       TextEditingController();
+  final TextEditingController _nomeUsuarioController = TextEditingController(); // Campo de nome de usuário
+  
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isSenhaVisivel = false;
   bool _isConfirmarSenhaVisivel = false;
@@ -24,8 +26,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
     final String email = _emailController.text;
     final String senha = _senhaController.text;
     final String confirmarSenha = _confirmarSenhaController.text;
+    final String nomeUsuario = _nomeUsuarioController.text; // Nome de usuário
 
-    if (email.isEmpty || senha.isEmpty || confirmarSenha.isEmpty) {
+    if (email.isEmpty || senha.isEmpty || confirmarSenha.isEmpty || nomeUsuario.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, preencha todos os campos')),
       );
@@ -50,21 +53,32 @@ class _TelaCadastroState extends State<TelaCadastro> {
           password: senha,
         );
 
-        // Cadastro realizado com sucesso
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Cadastro realizado com sucesso!')),
-        );
+        // Verifica se o usuário foi criado corretamente
+        User? user = userCredential.user;
 
-        // Navegar para a TelaPrincipal após o cadastro ser concluído
-        Future.delayed(const Duration(seconds: 2), () {
+        if (user != null) {
+          // Salvar dados no Firestore
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+            'nomeUsuario': nomeUsuario,
+            'email': email,
+            'dataRegistro': Timestamp.now(),
+            'nomeCompleto': null,
+            'dataNascimento': null,
+            'genero': null,
+            'bio': null,
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Usuário registrado com sucesso!')),
+          );
+
+          // Navegar para a tela principal após o cadastro
           Navigator.pushReplacement(
-            // ignore: use_build_context_synchronously
             context,
             MaterialPageRoute(builder: (context) => const TelaPrincipal()),
           );
-        });
+        }
       } catch (e) {
-        // Em caso de erro, exibe a mensagem de erro
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro ao cadastrar: $e')),
         );
@@ -92,6 +106,23 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 width: 200,
               ),
               const SizedBox(height: 24),
+              // Campo para o nome de usuário
+              SizedBox(
+                width: 300,
+                child: TextField(
+                  controller: _nomeUsuarioController, // Controle de nome de usuário
+                  decoration: const InputDecoration(
+                    labelText: 'Nome de Usuário',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black), // Borda preta
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               // Campo para o email
               SizedBox(
                 width: 300,
@@ -100,12 +131,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black), // Borda preta
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
@@ -121,12 +150,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Senha',
                     border: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black), // Borda preta
                     ),
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -153,12 +180,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Confirmar Senha',
                     border: const OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black), // Borda preta
                     ),
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
