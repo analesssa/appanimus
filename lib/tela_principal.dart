@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animus_senai/cadastrarTutor.dart';
-import 'package:animus_senai/cadastrarUsu.dart';
+import 'package:animus_senai/cadastrarusu.dart';
 import 'package:animus_senai/cadastropets.dart';
 import 'package:animus_senai/historicopet.dart';
 import 'tela_inicial.dart';
@@ -12,18 +12,18 @@ class TelaPrincipal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: Size.fromHeight(50),
         child: ClipRRect(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
           ),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF2196F3), // Azul claro
-                  Color(0xFFFFFFFF), // Branco
+                  Color(0xFF1976D2), // Azul escuro
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -66,7 +66,6 @@ class TelaPrincipal extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              // Imagem no topo do drawer
               const DrawerHeader(
                 decoration: BoxDecoration(
                   color: Colors.transparent,
@@ -74,7 +73,7 @@ class TelaPrincipal extends StatelessWidget {
                 child: Column(
                   children: [
                     Image(
-                      image: AssetImage('lib/assets/animuslogo.jpg'), // A imagem acima do nome
+                      image: AssetImage('lib/assets/animuslogo.jpg'),
                       width: 100,
                       height: 100,
                       fit: BoxFit.contain,
@@ -83,7 +82,7 @@ class TelaPrincipal extends StatelessWidget {
                     Text(
                       'MENU',
                       style: TextStyle(
-                        fontSize: 20, // Nome do menu menor
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -98,7 +97,8 @@ class TelaPrincipal extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CadastrarPetPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CadastrarPetPage()),
                   );
                 },
               ),
@@ -109,7 +109,8 @@ class TelaPrincipal extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CadastrarTutorPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CadastrarTutorPage()),
                   );
                 },
               ),
@@ -120,7 +121,8 @@ class TelaPrincipal extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CadastrarPetPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CadastrarPetPage()),
                   );
                 },
               ),
@@ -131,7 +133,8 @@ class TelaPrincipal extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Historicopet()),
+                    MaterialPageRoute(
+                        builder: (context) => const Historicopet()),
                   );
                 },
               ),
@@ -142,7 +145,8 @@ class TelaPrincipal extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CadastrarUsuarioPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CadastrarUsuarioPage()),
                   );
                 },
               ),
@@ -205,7 +209,10 @@ class TelaPrincipal extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawerItem(BuildContext context, {required String title, required IconData icon, required VoidCallback onTap}) {
+  Widget _buildDrawerItem(BuildContext context,
+      {required String title,
+      required IconData icon,
+      required VoidCallback onTap}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: MouseRegion(
@@ -217,13 +224,14 @@ class TelaPrincipal extends StatelessWidget {
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
               color: Colors.transparent,
-              borderRadius: BorderRadius.circular(30),  // Borda circular
+              borderRadius: BorderRadius.circular(30),
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1), // Cor de fundo sutil
-                borderRadius: BorderRadius.circular(30),  // Borda circular
+                color: Colors.white.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -234,7 +242,7 @@ class TelaPrincipal extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(icon, color: Colors.white),  // Ícone ao lado do texto
+                  Icon(icon, color: Colors.white),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
