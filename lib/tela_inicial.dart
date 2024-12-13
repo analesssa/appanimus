@@ -72,11 +72,12 @@ class _TelaInicialState extends State<TelaInicial> {
         ],
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF3F51B5), Color(0xFF2196F3)], // Gradiente futurista azul
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/telalogin.png'), // Caminho correto da imagem
+            fit: BoxFit.cover, // Ajusta a imagem para cobrir toda a tela
           ),
         ),
         child: Padding(
@@ -121,7 +122,6 @@ class _TelaInicialState extends State<TelaInicial> {
               _buildInputField(context, 'Senha', Icons.lock, true, _senhaFocusNode),
               const SizedBox(height: 25),
 
-            
               // Botões "Entrar" e "Cadastrar" lado a lado
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

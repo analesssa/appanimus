@@ -27,5 +27,12 @@ flutter:
   uses-material-design: true
   
   assets:
+    - lib/assets/bgtelabomba.png
+    - lib/assets/telaprincipal.png
     - lib/assets/animus.png
     - lib/assets/animuslogo.jpg
+    - lib/assets/bgtelaprincipal.png
+    - lib/assets/telalogin.png
+    - lib/assets/telaloginsec.jpg
+    
+    
