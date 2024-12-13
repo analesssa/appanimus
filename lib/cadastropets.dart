@@ -19,7 +19,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: Size.fromHeight(80), // Diminuir o tamanho da AppBar
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(30),
@@ -29,17 +29,18 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF2196F3), // Azul claro
-                  Color(0xFF1976D2), // Azul escuro
+                  Color(0xFF81D4FA), // Azul bebê
+                  Color(0xFF4FC3F7), // Azul mais forte
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
             ),
             child: AppBar(
-              title: const Text('Cadastrar Pet 🐶'),
+              title: const Text('Cadastrar Pet 🤖'),
               backgroundColor: Colors.transparent,
               elevation: 0,
+              centerTitle: true,
             ),
           ),
         ),
@@ -48,8 +49,8 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFF3F51B5), // Azul futurista
-              Color(0xFF2196F3), // Azul mais claro
+              Color(0xFFFFF9C4), // Amarelo bebê
+              Color(0xFFFFE082), // Amarelo mais forte
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -63,18 +64,52 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildTextField(_nomeDonoController, 'Nome do Tutor 👨‍⚕️'),
+                  // Linha 1: Nome do Tutor e CPF do Tutor
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_nomeDonoController, 'Nome do Tutor 🧑‍⚕️'),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildTextField(_cpfDonoController, 'CPF do Tutor 🆔', isNumber: true),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
-                  _buildTextField(_cpfDonoController, 'CPF do Tutor 🆔', isNumber: true),
+
+                  // Linha 2: Nome do Pet e Raça do Pet
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_nomePetController, 'Nome do Pet 🦾'),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildTextField(_racaPetController, 'Raça do Pet 🐕‍🦺'),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
-                  _buildTextField(_nomePetController, 'Nome do Pet 🐾'),
+
+                  // Linha 3: Espécie do Pet e Data de Nascimento
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_especiePetController, 'Espécie do Pet 🦴'),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _buildTextField(_dataNascimentoPetController, 'Data de Nascimento 🗓️'),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
-                  _buildTextField(_especiePetController, 'Espécie do Pet 🦴'),
-                  const SizedBox(height: 16),
-                  _buildTextField(_racaPetController, 'Raça do Pet 🐕'),
-                  const SizedBox(height: 16),
-                  _buildTextField(_dataNascimentoPetController, 'Data de Nascimento 📅'),
-                  const SizedBox(height: 16),
+
+                  // Botão de cadastro
                   ElevatedButton(
                     onPressed: _cadastrarPet,
                     style: ElevatedButton.styleFrom(
@@ -103,7 +138,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
 
   Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
     return SizedBox(
-      width: 300,
+      width: 150,  // Ajuste a largura para os campos ficarem proporcionais
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
@@ -111,17 +146,20 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
           labelStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black87, // Cor da label
           ),
           filled: true,
-          fillColor: Colors.white.withOpacity(0.1), // Cor do fundo do campo de entrada
+          fillColor: Colors.white, // Fundo branco para contrastar
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30), // Borda arredondada
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(
+              color: Color(0xFF81D4FA), // Azul bebê para a borda
+              width: 2, // Largura da borda
+            ),
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         ),
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black87), // Texto mais escuro
         keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       ),
     );
