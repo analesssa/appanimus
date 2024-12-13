@@ -1,9 +1,10 @@
+import 'package:animus_senai/tela_atendimentos.dart';
 import 'package:flutter/material.dart';
 import 'package:animus_senai/cadastrarTutor.dart';
 import 'package:animus_senai/cadastrarusu.dart';
 import 'package:animus_senai/cadastropets.dart';
-import 'package:animus_senai/historicopet.dart';
-import 'tela_inicial.dart';
+import 'package:animus_senai/tela_inicial.dart';
+
 
 class TelaPrincipal extends StatelessWidget {
   const TelaPrincipal({super.key});
@@ -12,9 +13,9 @@ class TelaPrincipal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
+        preferredSize: const Size.fromHeight(50),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
@@ -39,7 +40,7 @@ class TelaPrincipal extends StatelessWidget {
         ),
       ),
       drawer: Drawer(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(20),
             bottomRight: Radius.circular(20),
@@ -100,27 +101,15 @@ class TelaPrincipal extends StatelessWidget {
                   );
                 },
               ),
+              
               _buildDrawerItem(
                 context,
-                title: 'Pets Cadastrados',
-                icon: Icons.list_alt,
+                title: 'Atendimentos',
+                icon: Icons.access_time,
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CadastrarPetPage()),
-                  );
-                },
-              ),
-              _buildDrawerItem(
-                context,
-                title: 'Histórico Médico',
-                icon: Icons.history,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Historicopet()),
+                    MaterialPageRoute(builder: (context) => const AtendimentosPage()),
                   );
                 },
               ),
@@ -174,7 +163,7 @@ class TelaPrincipal extends StatelessWidget {
         child: GestureDetector(
           onTap: onTap,
           child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
               color: Colors.transparent,
@@ -184,7 +173,7 @@ class TelaPrincipal extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                color: Color(0xFF81D4FA), // Azul bebê como fundo
+                color: const Color(0xFF81D4FA), // Azul bebê como fundo
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
@@ -240,3 +229,4 @@ class TelaPrincipal extends StatelessWidget {
     );
   }
 }
+

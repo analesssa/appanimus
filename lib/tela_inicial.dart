@@ -89,8 +89,8 @@ class _TelaInicialState extends State<TelaInicial> {
               // Imagem logo maior, mas controlada
               Image.asset(
                 'lib/assets/animus.png',
-                width: 220,  // Logo um pouco maior
-                height: 220,
+                width: 50,  // Logo um pouco maior
+                height: 50,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 20),
@@ -101,7 +101,7 @@ class _TelaInicialState extends State<TelaInicial> {
                 style: TextStyle(
                   fontSize: 20,  // Tamanho menor
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 15, 0, 0),
                   letterSpacing: 1.5,
                 ),
               ),
@@ -110,7 +110,7 @@ class _TelaInicialState extends State<TelaInicial> {
                 'Sua plataforma de gestão de pets',
                 style: TextStyle(
                   fontSize: 14,  // Tamanho menor
-                  color: Colors.white70,
+                  color: Color.fromARGB(179, 12, 1, 1),
                   letterSpacing: 1.2,
                 ),
               ),
