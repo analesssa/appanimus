@@ -1,4 +1,8 @@
+import 'package:animus_senai/listar_pet.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; 
+// ignore: duplicate_import
+import "listar_pet.dart"; 
 
 class CadastrarPetPage extends StatefulWidget {
   const CadastrarPetPage({super.key});
@@ -19,19 +23,16 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80), // Diminuir o tamanho da AppBar
+        preferredSize: const Size.fromHeight(80),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
             bottomRight: Radius.circular(30),
           ),
           child: Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xFF81D4FA), // Azul bebê
-                  Color(0xFF4FC3F7), // Azul mais forte
-                ],
+                colors: [Color(0xFF81D4FA), Color(0xFF4FC3F7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -48,10 +49,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color(0xFFFFF9C4), // Amarelo bebê
-              Color(0xFFFFE082), // Amarelo mais forte
-            ],
+            colors: [Color(0xFFFFF9C4), Color(0xFFFFE082)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -62,70 +60,41 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Linha 1: Nome do Tutor e CPF do Tutor
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _buildTextField(_nomeDonoController, 'Nome do Tutor 🧑‍⚕️'),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildTextField(_cpfDonoController, 'CPF do Tutor 🆔', isNumber: true),
-                      ),
-                    ],
-                  ),
+                  _buildTextField(_nomeDonoController, 'Nome do Tutor 🧑‍⚕️'),
+                  _buildTextField(_cpfDonoController, 'CPF do Tutor 🆔', isNumber: true),
+                  _buildTextField(_nomePetController, 'Nome do Pet 🦾'),
+                  _buildTextField(_racaPetController, 'Raça do Pet 🐕‍🦺'),
+                  _buildTextField(_especiePetController, 'Espécie do Pet 🦴'),
+                  _buildTextField(_dataNascimentoPetController, 'Data de Nascimento 🗓️'),
+                  
                   const SizedBox(height: 16),
 
-                  // Linha 2: Nome do Pet e Raça do Pet
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _buildTextField(_nomePetController, 'Nome do Pet 🦾'),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildTextField(_racaPetController, 'Raça do Pet 🐕‍🦺'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Linha 3: Espécie do Pet e Data de Nascimento
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: _buildTextField(_especiePetController, 'Espécie do Pet 🦴'),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildTextField(_dataNascimentoPetController, 'Data de Nascimento 🗓️'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Botão de cadastro
                   ElevatedButton(
                     onPressed: _cadastrarPet,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent, // Cor do botão
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30), // Borda arredondada
-                      ),
+                      backgroundColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50.0),
                     ),
-                    child: const Text(
-                      'Cadastrar 🐾',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: const Text('Cadastrar 🐾', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ListarPetsPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50.0),
                     ),
+                    child: const Text('Pets Listados 📋', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
@@ -137,55 +106,38 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
   }
 
   Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
-    return SizedBox(
-      width: 150,  // Ajuste a largura para os campos ficarem proporcionais
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87, // Cor da label
-          ),
           filled: true,
-          fillColor: Colors.white, // Fundo branco para contrastar
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30), // Borda arredondada
-            borderSide: BorderSide(
-              color: Color(0xFF81D4FA), // Azul bebê para a borda
-              width: 2, // Largura da borda
-            ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+          fillColor: Colors.white,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
         ),
-        style: const TextStyle(color: Colors.black87), // Texto mais escuro
         keyboardType: isNumber ? TextInputType.number : TextInputType.text,
       ),
     );
   }
 
   void _cadastrarPet() {
-    final String nomeDono = _nomeDonoController.text;
-    final String cpfDono = _cpfDonoController.text;
-    final String nomePet = _nomePetController.text;
-    final String especiePet = _especiePetController.text;
-    final String racaPet = _racaPetController.text;
-    final String dataNascimentoPet = _dataNascimentoPetController.text;
-
-    if (nomeDono.isNotEmpty &&
-        cpfDono.isNotEmpty &&
-        nomePet.isNotEmpty &&
-        especiePet.isNotEmpty &&
-        racaPet.isNotEmpty &&
-        dataNascimentoPet.isNotEmpty) {
+    FirebaseFirestore.instance.collection('pets').add({
+      'nomeDono': _nomeDonoController.text,
+      'cpfDono': _cpfDonoController.text,
+      'nomePet': _nomePetController.text,
+      'especiePet': _especiePetController.text,
+      'racaPet': _racaPetController.text,
+      'dataNascimentoPet': _dataNascimentoPetController.text,
+    }).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Pet cadastrado com sucesso! 🐾')),
       );
-    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const ListarPetsPage()));
+    }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, preencha todos os campos. 😞')),
+        const SnackBar(content: Text('Erro ao cadastrar pet. 😞')),
       );
-    }
+    });
   }
 }

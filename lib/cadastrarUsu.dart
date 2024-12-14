@@ -1,4 +1,8 @@
+import 'package:animus_senai/listar_usuarios.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+// ignore: duplicate_import
+import 'listar_usuarios.dart'; 
 
 class CadastrarUsuarioPage extends StatefulWidget {
   const CadastrarUsuarioPage({super.key});
@@ -12,13 +16,45 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   final TextEditingController _senhaController = TextEditingController();
   String _tipoCargo = 'Administrador';
 
+  
+  Future<void> _cadastrarUsuario() async {
+    final String nomeUsuario = _nomeUsuarioController.text;
+    final String senha = _senhaController.text;
+
+    if (nomeUsuario.isNotEmpty && senha.isNotEmpty && senha.length >= 6) {
+      try {
+        await FirebaseFirestore.instance.collection('usuarios').add({
+          'nome_usuario': nomeUsuario,
+          'senha': senha,
+          'tipo_cargo': _tipoCargo,
+          'data_cadastro': FieldValue.serverTimestamp(),
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
+        );
+
+        _nomeUsuarioController.clear();
+        _senhaController.clear();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao cadastrar usuário: $e')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Preencha os campos corretamente.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80), // Tamanho da AppBar
+        preferredSize: Size.fromHeight(80),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
             bottomRight: Radius.circular(30),
           ),
@@ -26,8 +62,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFFFFF9C4), // Amarelo bebê
-                  Color(0xFFFFE082), // Amarelo mais forte
+                  Color(0xFFFFF9C4), 
+                  Color(0xFFFFE082), 
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -46,8 +82,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color(0xFF81D4FA), // Azul bebê
-              Color(0xFF4FC3F7), // Azul mais forte
+              Color(0xFF81D4FA), 
+              Color(0xFF4FC3F7), 
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -61,14 +97,11 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Imagem do logo
                   Image.asset(
                     'lib/assets/animuslogo.jpg',
                     height: 150,
                   ),
                   const SizedBox(height: 16),
-
-                  // Linha 1: Nome de Usuário
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -78,8 +111,6 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
-                  // Linha 2: Senha
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -89,13 +120,11 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
-                  // Linha 3: Tipo de Cargo
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 250, // Tamanho fixo para o campo de Cargo
+                        width: 250,
                         child: DropdownButtonFormField<String>(
                           value: _tipoCargo,
                           items: ['Administrador', 'Funcionario', 'Médico Veterinário']
@@ -118,12 +147,23 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     ],
                   ),
                   const SizedBox(height: 24),
-
-                  // Botão de Cadastro
                   ElevatedButton(
                     onPressed: _cadastrarUsuario,
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                     child: const Text('Cadastrar Usuário'),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ListarUsuariosPage(),
+                        ),
+                      );
+                    },
+                    child: const Text('Listar Usuários'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                   ),
                 ],
               ),
@@ -136,7 +176,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
 
   Widget _buildTextField(TextEditingController controller, String label, {bool isPassword = false}) {
     return SizedBox(
-      width: 250, // Ajuste a largura para os campos ficarem proporcionais
+      width: 250,
       child: TextField(
         controller: controller,
         obscureText: isPassword,
@@ -145,37 +185,21 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
           labelStyle: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.black87, // Cor da label
+            color: Colors.black87,
           ),
           filled: true,
-          fillColor: Colors.white, // Fundo branco para contrastar
+          fillColor: Colors.white,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30), // Borda arredondada
+            borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
-              color: Color(0xFF81D4FA), // Azul bebê para a borda
-              width: 2, // Largura da borda
+              color: Color(0xFF81D4FA),
+              width: 2,
             ),
           ),
           contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         ),
-        style: const TextStyle(color: Colors.black87), // Texto mais escuro
+        style: const TextStyle(color: Colors.black87),
       ),
     );
-  }
-
-  void _cadastrarUsuario() {
-    final String nomeUsuario = _nomeUsuarioController.text;
-    final String senha = _senhaController.text;
-
-    if (nomeUsuario.isNotEmpty && senha.isNotEmpty && senha.length >= 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuário cadastrado com sucesso!')),
-      );
-      Navigator.pop(context);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Preencha os campos corretamente.')),
-      );
-    }
   }
 }
