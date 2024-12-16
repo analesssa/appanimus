@@ -1,10 +1,9 @@
 import 'package:animus_senai/tela_atendimentos.dart';
 import 'package:flutter/material.dart';
 import 'package:animus_senai/cadastrarTutor.dart';
-import 'package:animus_senai/cadastrarusu.dart';
+import 'cadastrarUsu.dart';
 import 'package:animus_senai/cadastropets.dart';
 import 'package:animus_senai/tela_inicial.dart';
-
 
 class TelaPrincipal extends StatelessWidget {
   const TelaPrincipal({super.key});
@@ -101,7 +100,6 @@ class TelaPrincipal extends StatelessWidget {
                   );
                 },
               ),
-              
               _buildDrawerItem(
                 context,
                 title: 'Atendimentos',
@@ -137,18 +135,22 @@ class TelaPrincipal extends StatelessWidget {
           ),
         ),
       ),
-      body: Stack(children: [
-        // Imagem de fundo sem opacidade
-        Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('lib/assets/bgtelabomba.png'),
-              fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          // Imagem de fundo ajustada para ocupar toda a tela sem bordas brancas
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('lib/assets/bgtelabomba.png'),
+                  fit: BoxFit.cover, // BoxFit.cover para garantir que a imagem ocupe toda a tela
+                ),
+              ),
             ),
           ),
-        ),
-        // Conteúdo da tela principal
-      ]),
+          // Conteúdo da tela principal
+        ],
+      ),
     );
   }
 
@@ -229,4 +231,3 @@ class TelaPrincipal extends StatelessWidget {
     );
   }
 }
-

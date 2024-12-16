@@ -1,8 +1,6 @@
 import 'package:animus_senai/listar_usuarios.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// ignore: duplicate_import
-import 'listar_usuarios.dart'; 
 
 class CadastrarUsuarioPage extends StatefulWidget {
   const CadastrarUsuarioPage({super.key});
@@ -16,7 +14,6 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   final TextEditingController _senhaController = TextEditingController();
   String _tipoCargo = 'Administrador';
 
-  
   Future<void> _cadastrarUsuario() async {
     final String nomeUsuario = _nomeUsuarioController.text;
     final String senha = _senhaController.text;
@@ -52,7 +49,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: Size.fromHeight(60),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
@@ -62,8 +59,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFFFFF9C4), 
-                  Color(0xFFFFE082), 
+                  Color(0xFFFFF9C4),
+                  Color(0xFFFFE082),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -79,14 +76,10 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
         ),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFF81D4FA), 
-              Color(0xFF4FC3F7), 
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/fundobase.png'), // A imagem que você quer como fundo
+            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
           ),
         ),
         child: Center(

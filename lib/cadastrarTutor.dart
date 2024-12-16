@@ -25,7 +25,7 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40git congi),
+        preferredSize: Size.fromHeight(60),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
@@ -58,55 +58,103 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Campos de entrada
-                  _buildTextField(_nomeTutorController, 'Nome do Tutor'),
-                  _buildTextField(_cpfTutorController, 'CPF do Tutor', isNumber: true),
-                  _buildTextField(_emailTutorController, 'Email'),
-                  _buildTextField(_telefoneTutorController, 'Telefone', isNumber: true),
-                  _buildTextField(_cidadeController, 'Cidade'),
-                  _buildTextField(_bairroController, 'Bairro'),
-                  _buildTextField(_ruaController, 'Rua'),
-                  _buildTextField(_numeroCasaController, 'Número da Casa', isNumber: true),
-                  
-                  const SizedBox(height: 16),
-
-                  // Botão de cadastro
-                  ElevatedButton(
-                    onPressed: _cadastrarTutor,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  // Campos de entrada com Row para dois campos lado a lado
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_nomeTutorController, 'Nome do Tutor'),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50.0),
-                    ),
-                    child: const Text(
-                      'Cadastrar Tutor 📝',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _buildTextField(_cpfTutorController, 'CPF do Tutor', isNumber: true),
+                      ),
+                    ],
                   ),
-
+                  const SizedBox(height: 16),
+                  _buildTextField(_emailTutorController, 'Email'),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_telefoneTutorController, 'Telefone', isNumber: true),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _buildTextField(_cidadeController, 'Cidade'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_bairroController, 'Bairro'),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _buildTextField(_ruaController, 'Rua'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildTextField(_numeroCasaController, 'Número da Casa', isNumber: true),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 16),
 
-                  // Botão para navegar para a página de listagem
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ListarTutoresPage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                  // Botões de cadastro e ver tutores com cores ajustadas e alinhamento
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Botão de Cadastrar Tutor
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _cadastrarTutor,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14.0),
+                          ),
+                          child: const Text(
+                            'Cadastrar Tutor 📝',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50.0),
-                    ),
-                    child: const Text(
-                      'Ver Tutores Cadastrados 📋',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
+                      const SizedBox(width: 16),
+                      // Botão de Ver Tutores Cadastrados
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ListarTutoresPage()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14.0),
+                          ),
+                          child: const Text(
+                            'Ver Tutores Cadastrados 📋',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

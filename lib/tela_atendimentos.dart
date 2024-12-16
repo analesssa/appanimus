@@ -76,6 +76,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Atendimento salvo com sucesso!')),
+
       );
       petController.clear();
       servicoController.clear();
@@ -83,6 +84,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao salvar atendimento: $e')),
+
       );
     }
   }
@@ -92,77 +94,96 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Atendimentos'),
-        backgroundColor: const Color.fromARGB(255, 76, 153, 230),
+        backgroundColor: const Color.fromARGB(255, 247, 223, 173),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Campo Pet (Dropdown)
-                _buildDropdown(
-                  label: 'Pet 🐾',
-                  value: selectedPet,
-                  hint: 'Selecione um pet',
-                  items: petsList,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedPet = newValue;
-                      petController.text = newValue ?? '';
-                    });
-                  },
-                ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/fundobase.png'), // Imagem de fundo
+            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Campo Pet (Dropdown)
+                  _buildDropdown(
+                    label: 'Pet 🐾',
+                    value: selectedPet,
+                    hint: 'Selecione um pet',
+                    items: petsList,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedPet = newValue;
+                        petController.text = newValue ?? '';
+                      });
+                    },
+                  ),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                // Campo Serviço (Dropdown)
-                _buildDropdown(
-                  label: 'Serviço 🛠️',
-                  value: selectedServico,
-                  hint: 'Selecione um serviço',
-                  items: servicosList,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedServico = newValue;
-                      servicoController.text = newValue ?? '';
-                    });
-                  },
-                ),
+                  // Campo Serviço (Dropdown)
+                  _buildDropdown(
+                    label: 'Serviço 🛠️',
+                    value: selectedServico,
+                    hint: 'Selecione um serviço',
+                    items: servicosList,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedServico = newValue;
+                        servicoController.text = newValue ?? '';
+                      });
+                    },
+                  ),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-                // Campo Observações
-                _buildTextField(
-                  controller: observacoesController,
-                  label: 'Observações 📝',
-                  maxLines: 4,
-                ),
+                  // Campo Observações
+                  _buildTextField(
+                    controller: observacoesController,
+                    label: 'Observações 📝',
+                    maxLines: 4,
+                  ),
 
-                const SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
-                // Botões
-                _buildButton(
-                  label: 'Salvar',
-                  onPressed: () => saveAtendimento(context),
-                ),
-
-                const SizedBox(height: 16),
-
-                _buildButton(
-                  label: 'Listar Atendimentos',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ListAtendimentosPage(),
+                  // Botões em Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Botão Salvar
+                      Expanded(
+                        child: _buildButton(
+                          label: 'Salvar',
+                          onPressed: () => saveAtendimento(context),
+                          color: const Color.fromARGB(255, 106, 245, 233), // Cor pastel verde
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ],
+                      const SizedBox(width: 16),
+                      // Botão Listar Atendimentos
+                      Expanded(
+                        child: _buildButton(
+                          label: 'Listar Atendimentos',
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ListAtendimentosPage(),
+                              ),
+                            );
+                          },
+                          color: const Color.fromARGB(255, 240, 214, 65), // Cor pastel amarela
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -188,23 +209,28 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
-          DropdownButton<String>(
-            value: value,
-            hint: Text(hint),
-            onChanged: onChanged,
-            isExpanded: true,
-            style: TextStyle(fontSize: 18, color: Colors.black),
-            iconSize: 30,
-            underline: Container(
-              height: 2,
-              color: Colors.blue,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.0), // Espaço interno para o Dropdown
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white, // Fundo branco
+              border: Border.all(color: Colors.blue), // Borda azul
             ),
-            items: items.map<DropdownMenuItem<String>>((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(item),
-              );
-            }).toList(),
+            child: DropdownButton<String>(
+              value: value,
+              hint: Text(hint),
+              onChanged: onChanged,
+              isExpanded: true,
+              style: TextStyle(fontSize: 18, color: Colors.black),
+              iconSize: 30,
+              underline: SizedBox(), // Retira a linha padrão
+              items: items.map<DropdownMenuItem<String>>((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),
@@ -225,8 +251,11 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(fontSize: 18),
+          filled: true, // Habilita o fundo
+          fillColor: Colors.white, // Fundo branco
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderSide: BorderSide(color: Colors.blue),
           ),
         ),
       ),
@@ -237,19 +266,20 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
   Widget _buildButton({
     required String label,
     required VoidCallback onPressed,
+    required Color color,
   }) {
     return Container(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(label),
+        child: Text(label, style: TextStyle(fontSize: 20)), // Aumentando o tamanho da fonte
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
-          backgroundColor: const Color.fromARGB(255, 10, 170, 233),
+          backgroundColor: color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          textStyle: TextStyle(fontSize: 18),
+          textStyle: TextStyle(fontSize: 20), // Aumentando o tamanho da fonte
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'cadastrarTutor.dart'; // Importa a página de cadastro de tutor
+import 'tela_principal.dart'; // Importa a página da tela inicial (TelaPrincipal)
 
 class ListarTutoresPage extends StatelessWidget {
   const ListarTutoresPage({super.key});
@@ -9,56 +11,141 @@ class ListarTutoresPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tutores Cadastrados'),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color(0xFFFFF9C4), // Amarelo bebê
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('tutores').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final tutores = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: tutores.length,
-            itemBuilder: (context, index) {
-              final tutorDoc = tutores[index];
-              final tutor = tutorDoc.data() as Map<String, dynamic>;
-              final nome = tutor['nome'] ?? 'Nome não informado';
-              final cpf = tutor['cpf'] ?? 'CPF não informado';
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 4,
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                    leading: const Icon(Icons.person, color: Colors.blue),
-                    title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text('CPF: $cpf'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.orange),
-                          onPressed: () => _editarTutor(context, tutorDoc.id, tutor),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _confirmarDelecao(context, tutorDoc.id, nome),
-                        ),
-                      ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/fundobase.png'), // Adicionando a imagem de fundo
+            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
+          ),
+        ),
+        child: Column(
+          children: [
+            // Colocando os botões no topo
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Para os botões ficarem distribuídos
+                children: [
+                  // Botão para voltar para a tela inicial
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TelaPrincipal()), // Navega para a TelaPrincipal
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.home, 
+                      color: Colors.white, // Cor do ícone de casa
+                    ),
+                    label: const Text(
+                      'Voltar para a Tela Inicial ',
+                      style: TextStyle(
+                        fontSize: 16, // Fonte ajustada
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white, // Cor da fonte branca
+                        fontFamily: 'Roboto', // Fonte padrão
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green, // Cor verde suave
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0), // Tamanho ajustado
                     ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+
+                  // Botão para cadastrar novo tutor
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CadastrarTutorPage()),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.add, 
+                      color: Colors.white, // Cor do ícone de mais
+                    ),
+                    label: const Text(
+                      'Cadastrar Novo Tutor ',
+                      style: TextStyle(
+                        fontSize: 16, // Fonte ajustada
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white, // Cor da fonte branca
+                        fontFamily: 'Roboto', // Fonte padrão
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent, // Azul mais suave
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0), // Tamanho ajustado
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Listagem dos tutores abaixo dos botões
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('tutores').snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  final tutores = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: tutores.length,
+                    itemBuilder: (context, index) {
+                      final tutorDoc = tutores[index];
+                      final tutor = tutorDoc.data() as Map<String, dynamic>;
+                      final nome = tutor['nome'] ?? 'Nome não informado';
+                      final cpf = tutor['cpf'] ?? 'CPF não informado';
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 4,
+                          color: Colors.white.withOpacity(0.8), // Transparência no fundo do card
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                            leading: const Icon(Icons.person, color: Colors.blue),
+                            title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            subtitle: Text('CPF: $cpf'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.orange),
+                                  onPressed: () => _editarTutor(context, tutorDoc.id, tutor),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _confirmarDelecao(context, tutorDoc.id, nome),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
