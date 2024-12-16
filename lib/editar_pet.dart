@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -86,7 +85,6 @@ class _EditarPetPageState extends State<EditarPetPage> {
     );
   }
 
-  /// Função para atualizar os dados do pet no Firestore
   void _atualizarPet() async {
     try {
       await FirebaseFirestore.instance.collection('pets').doc(widget.petId).update({

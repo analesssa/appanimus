@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'cadastropets.dart'; // Importando a página de cadastro de pet
-import 'tela_principal.dart'; // Importando a tela principal
+import 'cadastropets.dart';
+import 'tela_principal.dart';
 
 class ListarPetsPage extends StatelessWidget {
   const ListarPetsPage({super.key});
@@ -11,27 +11,25 @@ class ListarPetsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pets Cadastrados 🐾'),
-        backgroundColor: Color(0xFFFFE4B5), // Amarelo bebê
+        backgroundColor: Color(0xFFFFE4B5),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('lib/assets/fundobase.png'),
-            fit: BoxFit.cover, // Garante que a imagem ocupe toda a tela
+            fit: BoxFit.cover,
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              // Botões fixos no topo da tela, agora em extremidades
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Coloca os botões nas extremidades
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Botão "Cadastrar Novo Pet" na extremidade esquerda
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.5, // Ajusta o tamanho do botão
+                      width: MediaQuery.of(context).size.width / 2.5,
                       child: ElevatedButton.icon(
                         onPressed: () {
                           Navigator.push(
@@ -42,31 +40,30 @@ class ListarPetsPage extends StatelessWidget {
                           );
                         },
                         icon: const Icon(
-                          Icons.add, 
-                          color: Colors.white, // Ícone do "mais" com cor branca
+                          Icons.add,
+                          color: Colors.white,
                         ),
                         label: const Text(
                           'Cadastrar Novo Pet ',
                           style: TextStyle(
-                            fontSize: 16, // Tamanho da fonte igual ao de "Cadastrar Novo Atendimento"
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87, // Cor da fonte igual ao de "Cadastrar Novo Atendimento"
+                            color: Colors.black87,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 250, 222, 169), // Cor de fundo azul claro (o mesmo do botão "Cadastrar Novo Atendimento")
+                          backgroundColor: const Color.fromARGB(255, 250, 222, 169),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
                           padding: const EdgeInsets.symmetric(
-                            vertical: 16.0, // Tamanho do botão igual ao de "Cadastrar Novo Atendimento"
+                            vertical: 16.0,
                           ),
                         ),
                       ),
                     ),
-                    // Botão "Voltar para Tela Inicial" na extremidade direita
                     SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.5, // Ajusta o tamanho do botão
+                      width: MediaQuery.of(context).size.width / 2.5,
                       child: ElevatedButton.icon(
                         onPressed: () {
                           Navigator.push(
@@ -77,24 +74,24 @@ class ListarPetsPage extends StatelessWidget {
                           );
                         },
                         icon: const Icon(
-                          Icons.home, 
-                          color: Colors.white, // Ícone da casa com cor branca
+                          Icons.home,
+                          color: Colors.white,
                         ),
                         label: const Text(
                           'Tela Inicial ',
                           style: TextStyle(
-                            fontSize: 16, // Tamanho da fonte igual ao de "Tela Inicial"
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87, // Cor da fonte igual ao de "Tela Inicial"
+                            color: Colors.black87,
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 250, 222, 169), // Cor de fundo verde claro (o mesmo do botão "Tela Inicial")
+                          backgroundColor: const Color.fromARGB(255, 250, 222, 169),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
                           padding: const EdgeInsets.symmetric(
-                            vertical: 16.0, // Tamanho do botão igual ao de "Tela Inicial"
+                            vertical: 16.0,
                           ),
                         ),
                       ),
@@ -102,7 +99,6 @@ class ListarPetsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              // StreamBuilder para listar os pets
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance.collection('pets').snapshots(),
@@ -127,7 +123,7 @@ class ListarPetsPage extends StatelessWidget {
                         final petDoc = pets[index];
                         final pet = petDoc.data() as Map<String, dynamic>;
                         final nomePet = pet['nomePet'] ?? 'Sem Nome';
-                        final tutorId = pet['tutorId']; // ID do tutor
+                        final tutorId = pet['tutorId'];
                         final racaPet = pet['racaPet'] ?? 'Raça desconhecida';
 
                         return FutureBuilder<DocumentSnapshot>(
@@ -146,14 +142,14 @@ class ListarPetsPage extends StatelessWidget {
                             }
 
                             final tutor = tutorSnapshot.data?.data() as Map<String, dynamic>?;
-                            final nomeDono = tutor?['nome'] ?? 'Sem Tutor'; // Nome do tutor
+                            final nomeDono = tutor?['nome'] ?? 'Sem Tutor';
 
                             return Container(
                               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16), // Menos padding para compactar
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.8), // Cor de fundo leve
-                                borderRadius: BorderRadius.circular(16), // Borda arredondada
+                                color: Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(16),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black26,
@@ -165,26 +161,23 @@ class ListarPetsPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Título com o nome do pet
                                   Text(
                                     '🐾 $nomePet',
                                     style: const TextStyle(
-                                      fontSize: 18, // Fonte um pouco menor
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black87, // Cor mais escura
+                                      color: Colors.black87,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
-                                  // Subtítulo com informações do tutor e raça
                                   Text(
                                     'Tutor: $nomeDono | Raça: $racaPet',
                                     style: const TextStyle(
-                                      fontSize: 14, // Fonte menor
-                                      color: Colors.black54, // Cor mais escura e suave
+                                      fontSize: 14,
+                                      color: Colors.black54,
                                     ),
                                   ),
                                   const SizedBox(height: 6),
-                                  // Botões de editar e excluir
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -215,7 +208,6 @@ class ListarPetsPage extends StatelessWidget {
     );
   }
 
-  // Função para confirmar a exclusão do pet com diálogo
   Future<void> _confirmarDelecao(BuildContext context, String petId) async {
     showDialog(
       context: context,
@@ -226,14 +218,14 @@ class ListarPetsPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Fecha o diálogo se o usuário cancelar
+                Navigator.pop(context);
               },
               child: const Text('Cancelar'),
             ),
             ElevatedButton(
               onPressed: () async {
-                Navigator.pop(context); // Fecha o diálogo
-                await _deletarPet(context, petId); // Deleta o pet
+                Navigator.pop(context);
+                await _deletarPet(context, petId);
               },
               child: const Text('Confirmar'),
             ),
@@ -243,7 +235,6 @@ class ListarPetsPage extends StatelessWidget {
     );
   }
 
-  // Função para deletar o pet
   Future<void> _deletarPet(BuildContext context, String petId) async {
     if (petId.isEmpty) {
       print('O ID do pet está vazio! Verifique o valor passado.');
@@ -267,7 +258,6 @@ class ListarPetsPage extends StatelessWidget {
     }
   }
 
-  // Função para editar o pet
   Future<void> _editarPet(BuildContext context, String petId, Map<String, dynamic> pet) async {
     final nomeController = TextEditingController(text: pet['nomePet']);
     final donoController = TextEditingController(text: pet['nomeDono']);

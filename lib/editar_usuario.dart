@@ -19,7 +19,6 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     _loadUsuarioData();
   }
 
-  // Função para carregar os dados do usuário para edição
   Future<void> _loadUsuarioData() async {
     try {
       final doc = await FirebaseFirestore.instance.collection('usuarios').doc(widget.usuarioId).get();
@@ -36,7 +35,6 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     }
   }
 
-  // Função para atualizar os dados do usuário
   Future<void> _editarUsuario() async {
     final String nomeUsuario = _nomeUsuarioController.text;
 

@@ -2,7 +2,7 @@ import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'listar_tutores.dart'; // Importa a página de listagem de tutores
+import 'listar_tutores.dart';
 
 class CadastrarTutorPage extends StatefulWidget {
   const CadastrarTutorPage({super.key});
@@ -33,11 +33,11 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
           ),
           child: Container(
             decoration: const BoxDecoration(
-              color: Color(0xFFFFF9C4), // Amarelo bebê para o AppBar
+              color: Color(0xFFFFF9C4),
             ),
             child: AppBar(
               title: const Text('Cadastrar Tutor 🧑‍⚕️'),
-              backgroundColor: Color(0xFFFFF9C4), // Amarelo bebê para o AppBar
+              backgroundColor: Color(0xFFFFF9C4),
               elevation: 0,
               centerTitle: true,
             ),
@@ -47,8 +47,8 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/fundobase.png'), // Adicionando a imagem de fundo
-            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Center(
@@ -58,7 +58,6 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Campos de entrada com Row para dois campos lado a lado
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -109,12 +108,9 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
-                  // Botões de cadastro e ver tutores com cores ajustadas e alinhamento
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Botão de Cadastrar Tutor
                       Expanded(
                         child: ElevatedButton(
                           onPressed: _cadastrarTutor,
@@ -132,7 +128,6 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Botão de Ver Tutores Cadastrados
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -173,7 +168,7 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
         decoration: InputDecoration(
           labelText: label,
           filled: true,
-          fillColor: Colors.white.withOpacity(0.8), // Fundo branco com transparência
+          fillColor: Colors.white.withOpacity(0.8),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
           ),

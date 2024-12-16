@@ -20,7 +20,7 @@ class TelaPrincipal extends StatelessWidget {
           ),
           child: Container(
             decoration: const BoxDecoration(
-              color: Color(0xFFFFF9C4), // Cor Amarelo Bebê
+              color: Color(0xFFFFF9C4), 
             ),
             child: AppBar(
               title: const Text('Bem-vindo ao Animus 🐶'),
@@ -30,7 +30,6 @@ class TelaPrincipal extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.notifications, color: Colors.black),
                   onPressed: () {
-                    // Ação de notificações
                   },
                 ),
               ],
@@ -47,7 +46,7 @@ class TelaPrincipal extends StatelessWidget {
         ),
         child: Container(
           decoration: const BoxDecoration(
-            color: Color(0xFFFFF9C4), // Cor Amarelo Bebê
+            color: Color(0xFFFFF9C4), 
           ),
           child: ListView(
             padding: EdgeInsets.zero,
@@ -70,7 +69,7 @@ class TelaPrincipal extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF81D4FA), // Azul bebê para o título
+                        color: Color(0xFF81D4FA), 
                       ),
                     ),
                   ],
@@ -137,18 +136,16 @@ class TelaPrincipal extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Imagem de fundo ajustada para ocupar toda a tela sem bordas brancas
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('lib/assets/bgtelabomba.png'),
-                  fit: BoxFit.cover, // BoxFit.cover para garantir que a imagem ocupe toda a tela
+                  fit: BoxFit.cover, 
                 ),
               ),
             ),
           ),
-          // Conteúdo da tela principal
         ],
       ),
     );
@@ -175,12 +172,12 @@ class TelaPrincipal extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                color: const Color(0xFF81D4FA), // Azul bebê como fundo
+                color: const Color(0xFF81D4FA), 
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
                 children: [
-                  Icon(icon, color: Colors.white), // Ícone branco
+                  Icon(icon, color: Colors.white), 
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -188,7 +185,7 @@ class TelaPrincipal extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white, // Texto branco para contraste
+                        color: Colors.white, 
                       ),
                     ),
                   ),

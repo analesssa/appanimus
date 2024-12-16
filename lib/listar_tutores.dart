@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'cadastrarTutor.dart'; // Importa a página de cadastro de tutor
-import 'tela_principal.dart'; // Importa a página da tela inicial (TelaPrincipal)
+import 'cadastrarTutor.dart';
+import 'tela_principal.dart';
 
 class ListarTutoresPage extends StatelessWidget {
   const ListarTutoresPage({super.key});
@@ -11,54 +11,50 @@ class ListarTutoresPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tutores Cadastrados'),
-        backgroundColor: const Color(0xFFFFF9C4), // Amarelo bebê
+        backgroundColor: const Color(0xFFFFF9C4),
       ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/fundobase.png'), // Adicionando a imagem de fundo
-            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            // Colocando os botões no topo
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Para os botões ficarem distribuídos
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Botão para voltar para a tela inicial
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => const TelaPrincipal()), // Navega para a TelaPrincipal
+                        MaterialPageRoute(builder: (context) => const TelaPrincipal()),
                       );
                     },
                     icon: const Icon(
                       Icons.home, 
-                      color: Colors.white, // Cor do ícone de casa
+                      color: Colors.white,
                     ),
                     label: const Text(
                       'Voltar para a Tela Inicial ',
                       style: TextStyle(
-                        fontSize: 16, // Fonte ajustada
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white, // Cor da fonte branca
-                        fontFamily: 'Roboto', // Fonte padrão
+                        color: Colors.white,
+                        fontFamily: 'Roboto',
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, // Cor verde suave
+                      backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0), // Tamanho ajustado
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
                     ),
                   ),
-
-                  // Botão para cadastrar novo tutor
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -68,30 +64,28 @@ class ListarTutoresPage extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.add, 
-                      color: Colors.white, // Cor do ícone de mais
+                      color: Colors.white,
                     ),
                     label: const Text(
                       'Cadastrar Novo Tutor ',
                       style: TextStyle(
-                        fontSize: 16, // Fonte ajustada
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white, // Cor da fonte branca
-                        fontFamily: 'Roboto', // Fonte padrão
+                        color: Colors.white,
+                        fontFamily: 'Roboto',
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent, // Azul mais suave
+                      backgroundColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0), // Tamanho ajustado
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
                     ),
                   ),
                 ],
               ),
             ),
-
-            // Listagem dos tutores abaixo dos botões
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('tutores').snapshots(),
@@ -117,7 +111,7 @@ class ListarTutoresPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           elevation: 4,
-                          color: Colors.white.withOpacity(0.8), // Transparência no fundo do card
+                          color: Colors.white.withOpacity(0.8),
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                             leading: const Icon(Icons.person, color: Colors.blue),
@@ -150,7 +144,6 @@ class ListarTutoresPage extends StatelessWidget {
     );
   }
 
-  /// Função para confirmar a remoção do tutor
   void _confirmarDelecao(BuildContext context, String tutorId, String nome) {
     showDialog(
       context: context,
@@ -185,7 +178,6 @@ class ListarTutoresPage extends StatelessWidget {
     );
   }
 
-  /// Função para editar as informações do tutor
   void _editarTutor(BuildContext context, String tutorId, Map<String, dynamic> tutor) {
     final nomeController = TextEditingController(text: tutor['nome']);
     final cpfController = TextEditingController(text: tutor['cpf']);

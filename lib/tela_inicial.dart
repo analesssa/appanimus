@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'tela_principal.dart';
-import 'telacadastro.dart'; // Importe o arquivo de cadastro
-import 'package:email_validator/email_validator.dart'; // Para validação de email
+import 'telacadastro.dart'; 
+import 'package:email_validator/email_validator.dart'; 
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -18,7 +18,7 @@ class _TelaInicialState extends State<TelaInicial> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Função para o login
+ 
   void _login() async {
     final String email = _emailController.text;
     final String senha = _senhaController.text;
@@ -38,7 +38,6 @@ class _TelaInicialState extends State<TelaInicial> {
     }
 
     try {
-      // Tentando fazer o login com o email e senha
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: senha,
@@ -47,32 +46,31 @@ class _TelaInicialState extends State<TelaInicial> {
       User? user = userCredential.user;
 
       if (user != null) {
-        // Verificando se o email está presente na coleção 'users' no Firestore
         DocumentSnapshot snapshot = await FirebaseFirestore.instance
             .collection('users')
-            .doc(user.uid) // Utilizando o UID do usuário autenticado
+            .doc(user.uid) 
             .get();
 
         if (snapshot.exists) {
-          // Usuário autenticado com sucesso
+    
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Login realizado com sucesso!')),
           );
 
-          // Redireciona para a tela principal após o login
+         
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const TelaPrincipal()),
           );
         } else {
-          // Caso o email não tenha sido encontrado na coleção 'users' do Firestore
+         
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Usuário não encontrado. Realize o cadastro.')),
           );
         }
       }
     } catch (e) {
-      // Caso o email ou senha estejam incorretos
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao fazer login. Usuário inválido. Cadastra-se ou tente novamente!')),
       );
@@ -95,7 +93,6 @@ class _TelaInicialState extends State<TelaInicial> {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Calcula o tamanho da tela para responsividade
           double screenHeight = constraints.maxHeight;
           double screenWidth = constraints.maxWidth;
 
@@ -105,7 +102,7 @@ class _TelaInicialState extends State<TelaInicial> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('lib/assets/telalogin.png'),
-                fit: BoxFit.cover, // Garantindo que a imagem cubra a tela de forma responsiva
+                fit: BoxFit.cover, 
               ),
             ),
             child: Padding(
@@ -114,7 +111,7 @@ class _TelaInicialState extends State<TelaInicial> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: screenHeight * 0.35), // Aumentei o valor para descer ainda mais os textos
+                  SizedBox(height: screenHeight * 0.35), 
                   const Text(
                     'Bem-vindo ao Animus',
                     style: TextStyle(
@@ -124,7 +121,7 @@ class _TelaInicialState extends State<TelaInicial> {
                       letterSpacing: 1.5,
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.01), // Menor espaçamento entre o texto e o próximo texto
+                  SizedBox(height: screenHeight * 0.01), 
                   const Text(
                     'Sua plataforma de gestão de pets',
                     style: TextStyle(
@@ -133,15 +130,14 @@ class _TelaInicialState extends State<TelaInicial> {
                       letterSpacing: 1.2,
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.05), // Mais espaço abaixo do texto para separar do campo de email
+                  SizedBox(height: screenHeight * 0.05), 
 
-                  // Campos de Email e Senha
                   _buildInputField(context, 'Email', Icons.email, false),
-                  SizedBox(height: screenHeight * 0.02), // Menor espaçamento entre o campo de email e senha
+                  SizedBox(height: screenHeight * 0.02), 
                   _buildInputField(context, 'Senha', Icons.lock, true),
-                  SizedBox(height: screenHeight * 0.05), // Aumentei o espaçamento entre os campos e os botões
+                  SizedBox(height: screenHeight * 0.05), 
 
-                  // Botões "Entrar" e "Cadastrar"
+               
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -164,7 +160,6 @@ class _TelaInicialState extends State<TelaInicial> {
     );
   }
 
-  // Função para construir os campos de input
   Widget _buildInputField(BuildContext context, String label, IconData icon, bool obscureText) {
     return Container(
       width: 300,
@@ -203,7 +198,7 @@ class _TelaInicialState extends State<TelaInicial> {
     );
   }
 
-  // Função para criar os botões interativos
+ 
   Widget _buildInteractiveButton(BuildContext context, String label, Color color, VoidCallback onPressed) {
     return Container(
       width: 120,

@@ -78,8 +78,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/fundobase.png'), // A imagem que você quer como fundo
-            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Center(

@@ -1,8 +1,7 @@
 import 'package:animus_senai/editar_usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// ignore: duplicate_import
-import 'editar_usuario.dart'; 
+
 
 class ListarUsuariosPage extends StatelessWidget {
   const ListarUsuariosPage({super.key});
@@ -47,7 +46,7 @@ class ListarUsuariosPage extends StatelessWidget {
             itemCount: usuarios.length,
             itemBuilder: (context, index) {
               final usuario = usuarios[index];
-              final String userId = usuario.id; // Obter o ID do usuário
+              final String userId = usuario.id; 
               final String nomeUsuario = usuario['nome_usuario'];
               final String tipoCargo = usuario['tipo_cargo'];
 
@@ -57,7 +56,6 @@ class ListarUsuariosPage extends StatelessWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Botão Editar
                     IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {
@@ -69,7 +67,6 @@ class ListarUsuariosPage extends StatelessWidget {
                         );
                       },
                     ),
-                    // Botão Deletar
                     IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () => _deletarUsuario(context, userId),

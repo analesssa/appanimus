@@ -15,25 +15,13 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
 
   String? _selectedEspecie;
   String? _selectedRaca;
-  String? _selectedTutorId;  // Armazena o ID do tutor selecionado
+  String? _selectedTutorId;
 
-  // Lista de opções para o Dropdown de Espécie
   List<String> _especies = [
-    'Cachorro',
-    'Gato',
-    'Peixe',
-    'Pássaro',
-    'Hamster',
-    'Coelho',
-    'Réptéis',
-    'Cobaias',
-    'Furão',
-    'Serpentes',
-    'Cagado',
-    'Outros'
+    'Cachorro', 'Gato', 'Peixe', 'Pássaro', 'Hamster', 'Coelho', 'Réptéis', 
+    'Cobaias', 'Furão', 'Serpentes', 'Cagado', 'Outros'
   ];
 
-  // Lista de raças para Cachorro e Gato
   List<String> _racasCachorro = [
     'Labrador Retriever', 'Pastor Alemão', 'Bulldog Francês', 'Poodle', 
     'Golden Retriever', 'Chihuahua', 'Beagle', 'Shih Tzu', 'Rottweiler', 
@@ -52,13 +40,12 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtendo as dimensões da tela
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60), // Reduzindo a altura do AppBar
+        preferredSize: const Size.fromHeight(60),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
@@ -66,11 +53,11 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
           ),
           child: Container(
             decoration: const BoxDecoration(
-              color: Color(0xFFFFF9C4), // Cor de fundo Amarelo Bebê
+              color: Color(0xFFFFF9C4),
             ),
             child: AppBar(
               title: const Text('Cadastrar Pet 🤖'),
-              backgroundColor: Colors.transparent, // Para manter a transparência
+              backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: true,
             ),
@@ -82,30 +69,24 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
         height: screenHeight,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/fundobase.png'), // Ajuste o caminho conforme necessário
-            fit: BoxFit.cover, // Garantindo que a imagem cubra a tela de forma responsiva
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover,
           ),
         ),
-        child: SafeArea( // Garante que o conteúdo não sobreponha a área de status
+        child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Campo de dropdown para o tutor
                   _buildDropdownTutor(),
-
                   const SizedBox(height: 16),
-
-                  // Outros campos
                   _buildTextField(_nomePetController, 'Nome do Pet 🦾'),
                   _buildDropdownEspecie(),
                   _buildDropdownRaca(),
                   _buildDatePickerField(),
                   const SizedBox(height: 16),
-
-                  // Botões em Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -118,7 +99,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
                         ),
                         child: const Text('Cadastrar 🐾', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
-                      const SizedBox(width: 16), // Espaçamento entre os botões
+                      const SizedBox(width: 16),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -144,27 +125,25 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     );
   }
 
-  // Função para criar o estilo uniforme para todos os campos
   InputDecoration _inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.black), // Aumenta o peso da fonte
+      labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colors.black, width: 2), // Borda mais grossa e escura
+        borderSide: const BorderSide(color: Colors.black, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     );
   }
 
-  // Função para criar o campo de texto com estilo uniforme
   Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        width: MediaQuery.of(context).size.width * 0.8,
         child: TextFormField(
           controller: controller,
           decoration: _inputDecoration(label),
@@ -174,60 +153,59 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     );
   }
 
-  // Função para construir o Dropdown de Tutor com nome e CPF
- Widget _buildDropdownTutor() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura do dropdown
-      child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('tutores').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
+  Widget _buildDropdownTutor() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('tutores').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
 
-          if (snapshot.hasError) {
-            return Text('Erro ao carregar tutores: ${snapshot.error}');
-          }
+            if (snapshot.hasError) {
+              return Text('Erro ao carregar tutores: ${snapshot.error}');
+            }
 
-          final tutors = snapshot.data?.docs ?? [];
+            final tutors = snapshot.data?.docs ?? [];
 
-          return DropdownButtonFormField<String>(
-            value: _selectedTutorId,
-            hint: const Text('Selecione o Tutor'),
-            isExpanded: true,
-            decoration: _inputDecoration('Nome do Tutor'),
-            onChanged: (value) {
-              setState(() {
-                _selectedTutorId = value;
-              });
-            },
-            items: tutors.map((doc) {
-              final tutor = doc.data() as Map<String, dynamic>;
-              final tutorName = tutor['nome'] ?? 'Nome não disponível';
-              final tutorCpf = tutor['cpf'] ?? 'CPF não disponível';
-              final displayText = '$tutorName - CPF: $tutorCpf'; // Exibindo nome e CPF
-              return DropdownMenuItem<String>(
-                value: doc.id,
-                child: Align(
-                  alignment: Alignment.center, // Centraliza o texto do item
-                  child: Text(displayText),
-                ),
-              );
-            }).toList(),
-          );
-        },
+            return DropdownButtonFormField<String>(
+              value: _selectedTutorId,
+              hint: const Text('Selecione o Tutor'),
+              isExpanded: true,
+              decoration: _inputDecoration('Nome do Tutor'),
+              onChanged: (value) {
+                setState(() {
+                  _selectedTutorId = value;
+                });
+              },
+              items: tutors.map((doc) {
+                final tutor = doc.data() as Map<String, dynamic>;
+                final tutorName = tutor['nome'] ?? 'Nome não disponível';
+                final tutorCpf = tutor['cpf'] ?? 'CPF não disponível';
+                final displayText = '$tutorName - CPF: $tutorCpf';
+                return DropdownMenuItem<String>(
+                  value: doc.id,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(displayText),
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        ),
       ),
-    ),
-  );
-}
-  // Função para construir o Dropdown de Espécie com estilo uniforme
+    );
+  }
+
   Widget _buildDropdownEspecie() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        width: MediaQuery.of(context).size.width * 0.8,
         child: DropdownButtonFormField<String>(
           value: _selectedEspecie,
           hint: const Text('Selecione a espécie do Pet'),
@@ -236,14 +214,14 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
           onChanged: (value) {
             setState(() {
               _selectedEspecie = value;
-              _selectedRaca = null; // Reseta a raça quando a espécie é alterada
+              _selectedRaca = null;
             });
           },
           items: _especies.map((String especie) {
             return DropdownMenuItem<String>(
               value: especie,
               child: Align(
-                alignment: Alignment.center, // Centraliza o texto
+                alignment: Alignment.center,
                 child: Text(especie),
               ),
             );
@@ -253,9 +231,8 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     );
   }
 
-  // Função para construir o Dropdown de Raça com estilo uniforme
   Widget _buildDropdownRaca() {
-    List<String> racas = _racasOutros; // Default para "Outro"
+    List<String> racas = _racasOutros;
 
     if (_selectedEspecie == 'Cachorro') {
       racas = _racasCachorro;
@@ -266,7 +243,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        width: MediaQuery.of(context).size.width * 0.8,
         child: DropdownButtonFormField<String>(
           value: _selectedRaca,
           hint: const Text('Selecione a raça do Pet'),
@@ -281,7 +258,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
             return DropdownMenuItem<String>(
               value: raca,
               child: Align(
-                alignment: Alignment.center, // Centraliza o texto
+                alignment: Alignment.center,
                 child: Text(raca),
               ),
             );
@@ -291,12 +268,11 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     );
   }
 
-  // Função para o campo de data com o DatePicker
   Widget _buildDatePickerField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        width: MediaQuery.of(context).size.width * 0.8,
         child: TextFormField(
           controller: _dataNascimentoPetController,
           decoration: _inputDecoration('Data de Nascimento 🗓️'),
@@ -311,7 +287,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
             );
             if (selectedDate != null) {
               setState(() {
-                _dataNascimentoPetController.text = selectedDate.toLocal().toString().split(' ')[0]; // Formata a data
+                _dataNascimentoPetController.text = selectedDate.toLocal().toString().split(' ')[0];
               });
             }
           },
@@ -320,7 +296,6 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     );
   }
 
-  // Função para cadastrar o pet no Firestore
   void _cadastrarPet() {
     if (_selectedTutorId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -330,7 +305,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
     }
 
     FirebaseFirestore.instance.collection('pets').add({
-      'tutorId': _selectedTutorId,  // Salvando o ID do tutor
+      'tutorId': _selectedTutorId,
       'nomePet': _nomePetController.text,
       'especiePet': _selectedEspecie,
       'racaPet': _selectedRaca,

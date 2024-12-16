@@ -17,7 +17,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
   String? selectedPet;
   String? selectedServico;
 
-  // Lista fixa de opções de serviços
+  
   List<String> servicosList = [
     'Tosa baby',
     'Tosa baixa',
@@ -32,16 +32,14 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
     'Outro'
   ];
 
-  // Lista para armazenar os nomes dos pets cadastrados
   List<String> petsList = [];
   
   @override
   void initState() {
     super.initState();
-    fetchPets(); // Puxa os pets cadastrados quando a página for carregada
+    fetchPets(); 
   }
 
-  // Função para buscar os pets no Firestore
   Future<void> fetchPets() async {
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('pets').get();
@@ -99,8 +97,8 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/fundobase.png'), // Imagem de fundo
-            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover, 
           ),
         ),
         child: Center(
@@ -111,7 +109,6 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Campo Pet (Dropdown)
                   _buildDropdown(
                     label: 'Pet 🐾',
                     value: selectedPet,
@@ -126,8 +123,6 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // Campo Serviço (Dropdown)
                   _buildDropdown(
                     label: 'Serviço 🛠️',
                     value: selectedServico,
@@ -142,8 +137,6 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // Campo Observações
                   _buildTextField(
                     controller: observacoesController,
                     label: 'Observações 📝',
@@ -152,7 +145,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
 
                   const SizedBox(height: 32),
 
-                  // Botões em Row
+              
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -161,11 +154,11 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
                         child: _buildButton(
                           label: 'Salvar',
                           onPressed: () => saveAtendimento(context),
-                          color: const Color.fromARGB(255, 106, 245, 233), // Cor pastel verde
+                          color: const Color.fromARGB(255, 106, 245, 233), 
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Botão Listar Atendimentos
+                  
                       Expanded(
                         child: _buildButton(
                           label: 'Listar Atendimentos',
@@ -177,7 +170,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
                               ),
                             );
                           },
-                          color: const Color.fromARGB(255, 240, 214, 65), // Cor pastel amarela
+                          color: const Color.fromARGB(255, 240, 214, 65),
                         ),
                       ),
                     ],
@@ -191,7 +184,6 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
     );
   }
 
-  // Widget para criar o Dropdown (Pet e Serviço)
   Widget _buildDropdown({
     required String label,
     required String? value,
@@ -210,11 +202,11 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
           ),
           const SizedBox(height: 8),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.0), // Espaço interno para o Dropdown
+            padding: EdgeInsets.symmetric(horizontal: 12.0), 
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.white, // Fundo branco
-              border: Border.all(color: Colors.blue), // Borda azul
+              color: Colors.white, 
+              border: Border.all(color: Colors.blue), 
             ),
             child: DropdownButton<String>(
               value: value,
@@ -223,7 +215,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
               isExpanded: true,
               style: TextStyle(fontSize: 18, color: Colors.black),
               iconSize: 30,
-              underline: SizedBox(), // Retira a linha padrão
+              underline: SizedBox(), 
               items: items.map<DropdownMenuItem<String>>((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
@@ -237,7 +229,6 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
     );
   }
 
-  // Widget para criar o TextField de Observações
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
@@ -251,8 +242,8 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(fontSize: 18),
-          filled: true, // Habilita o fundo
-          fillColor: Colors.white, // Fundo branco
+          filled: true, 
+          fillColor: Colors.white, 
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
             borderSide: BorderSide(color: Colors.blue),
@@ -262,7 +253,7 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
     );
   }
 
-  // Widget para criar os botões
+
   Widget _buildButton({
     required String label,
     required VoidCallback onPressed,
@@ -272,14 +263,14 @@ class _AtendimentosPageState extends State<AtendimentosPage> {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(label, style: TextStyle(fontSize: 20)), // Aumentando o tamanho da fonte
+        child: Text(label, style: TextStyle(fontSize: 20)), 
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           backgroundColor: color,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          textStyle: TextStyle(fontSize: 20), // Aumentando o tamanho da fonte
+          textStyle: TextStyle(fontSize: 20), 
         ),
       ),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'tela_principal.dart';
-import 'package:email_validator/email_validator.dart'; // Para validação de email
+import 'package:email_validator/email_validator.dart'; 
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
@@ -20,7 +20,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
   bool _isSenhaVisivel = false;
   bool _isConfirmarSenhaVisivel = false;
 
-  // Função para registrar o usuário no Firebase
+
   Future<void> _cadastrar() async {
     final String email = _emailController.text;
     final String senha = _senhaController.text;
@@ -44,17 +44,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
       );
     } else {
       try {
-        // Verifica se o email já está em uso
+        
         final userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: senha,
         );
 
-        // Verifica se o usuário foi criado corretamente
         User? user = userCredential.user;
 
         if (user != null) {
-          // Salvar dados no Firestore
+
           await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
             'email': email,
             'dataRegistro': Timestamp.now(),
@@ -64,7 +63,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
             const SnackBar(content: Text('Usuário registrado com sucesso!')),
           );
 
-          // Navegar para a tela principal após o cadastro
+          
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const TelaPrincipal()),
@@ -83,7 +82,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cadastro'),
-        backgroundColor: Color(0xFFFFF9C4), // Amarelo bebê
+        backgroundColor: Color(0xFFFFF9C4), 
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -96,15 +95,15 @@ class _TelaCadastroState extends State<TelaCadastro> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('lib/assets/telalogin.png'),
-                fit: BoxFit.cover, // Garantindo que a imagem cubra a tela de forma responsiva
+                fit: BoxFit.cover, 
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.25), // Ajustando padding para descer os campos
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 24), // Espaço acima dos campos
+                  const SizedBox(height: 24), 
                   SizedBox(
                     width: 300,
                     child: _buildInputField(context, 'Email', Icons.email, false, _emailController),
@@ -119,13 +118,13 @@ class _TelaCadastroState extends State<TelaCadastro> {
                     width: 300,
                     child: _buildInputField(context, 'Confirmar Senha', Icons.lock, _isConfirmarSenhaVisivel, _confirmarSenhaController, true),
                   ),
-                  const SizedBox(height: 40), // Aumentei o espaçamento entre os campos e o botão
+                  const SizedBox(height: 40), 
                   SizedBox(
                     width: 300,
                     child: ElevatedButton(
                       onPressed: _cadastrar,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFFB8C00), // Cor de fundo do botão
+                        backgroundColor: Color(0xFFFB8C00), 
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -151,7 +150,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     );
   }
 
-  // Função para construir os campos de input
+  
   Widget _buildInputField(BuildContext context, String label, IconData icon, bool obscureText, TextEditingController controller, [bool isPassword = false]) {
     return Container(
       decoration: BoxDecoration(
@@ -182,7 +181,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
           contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(color: Color(0xFFFFA000), width: 2), // Cor que acende ao digitar
+            borderSide: const BorderSide(color: Color(0xFFFFA000), width: 2),
           ),
         ),
       ),

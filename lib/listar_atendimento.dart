@@ -1,7 +1,7 @@
 import 'package:animus_senai/tela_principal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart'; // Substitua com a página de tela inicial
-import 'tela_atendimentos.dart'; // Substitua com a página de cadastro de atendimento
+import 'package:flutter/material.dart';
+import 'tela_atendimentos.dart';
 
 class ListAtendimentosPage extends StatelessWidget {
   const ListAtendimentosPage({super.key});
@@ -13,35 +13,33 @@ class ListAtendimentosPage extends StatelessWidget {
         title: const Text(
           'Atendimentos 🐾',
           style: TextStyle(
-            fontSize: 22, // Tamanho de fonte igual ao do Listar Tutores
+            fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
         ),
-        backgroundColor: const Color(0xFFFFE4B5), // Amarelo bebê igual ao do Listar Tutores
+        backgroundColor: const Color(0xFFFFE4B5),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/fundobase.png'), // Fundo conforme solicitado
-            fit: BoxFit.cover, // Garante que a imagem ocupe toda a tela
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            // Linha com botões fora da AppBar
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Botão "Cadastrar Novo Atendimento" no canto esquerdo
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  AtendimentosPage(),
+                          builder: (context) => AtendimentosPage(),
                         ),
                       );
                     },
@@ -54,11 +52,10 @@ class ListAtendimentosPage extends StatelessWidget {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFE4B5), // Cor de fundo
+                      backgroundColor: const Color(0xFFFFE4B5),
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                     ),
                   ),
-                  // Botão "Voltar para Tela Inicial" no canto direito
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -77,14 +74,13 @@ class ListAtendimentosPage extends StatelessWidget {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFE4B5), // Cor de fundo
+                      backgroundColor: const Color(0xFFFFE4B5),
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                     ),
                   ),
                 ],
               ),
             ),
-            // Exibição dos atendimentos
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -125,26 +121,23 @@ class ListAtendimentosPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Título com o nome do pet e emoji
                             Text(
                               '🐾 ${atendimentoData['pet'] ?? 'Sem Nome'}',
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black87, // Cor do texto
+                                color: Colors.black87,
                               ),
                             ),
                             const SizedBox(height: 6),
-                            // Subtítulo com informações do serviço e observações
                             Text(
                               'Serviço: ${atendimentoData['servico'] ?? 'Sem Serviço'} | Observações: ${atendimentoData['observacoes'] ?? 'Sem Observações'}',
                               style: const TextStyle(
                                 fontSize: 16,
-                                color: Colors.black54, // Cor do texto
+                                color: Colors.black54,
                               ),
                             ),
                             const SizedBox(height: 8),
-                            // Botões de editar e excluir
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -173,7 +166,6 @@ class ListAtendimentosPage extends StatelessWidget {
     );
   }
 
-  /// Função para deletar o atendimento do Firestore
   void _deletarAtendimento(BuildContext context, String atendimentoId) async {
     try {
       await FirebaseFirestore.instance.collection('atendimentos').doc(atendimentoId).delete();
@@ -187,7 +179,6 @@ class ListAtendimentosPage extends StatelessWidget {
     }
   }
 
-  /// Função para editar as informações do atendimento
   void _editarAtendimento(BuildContext context, String atendimentoId, Map<String, dynamic> atendimentoData) {
     final petController = TextEditingController(text: atendimentoData['pet']);
     final servicoController = TextEditingController(text: atendimentoData['servico']);
