@@ -91,7 +91,7 @@ class TelaPrincipal extends StatelessWidget {
               ),
               _buildDrawerItem(
                 context,
-                title: 'Donos',
+                title: 'Tutores',
                 icon: Icons.person,
                 onTap: () {
                   Navigator.push(

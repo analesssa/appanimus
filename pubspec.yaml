@@ -1,7 +1,7 @@
 name: animus_senai
 description: "A new Flutter project."
 
-publish_to: 'none' 
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -17,7 +17,8 @@ dependencies:
   cloud_firestore: ^5.5.0
   email_validator: ^2.0.1
   firebase_auth: ^5.3.4
- 
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -34,5 +35,4 @@ flutter:
     - lib/assets/bgtelaprincipal.png
     - lib/assets/telalogin.png
     - lib/assets/telaloginsec.jpg
-    
-    
+    - lib/assets/fundobase.png

@@ -28,24 +28,31 @@ class ListarTutoresPage extends StatelessWidget {
               final nome = tutor['nome'] ?? 'Nome não informado';
               final cpf = tutor['cpf'] ?? 'CPF não informado';
 
-              return Card(
-                margin: const EdgeInsets.all(8),
-                child: ListTile(
-                  leading: const Icon(Icons.person, color: Colors.blue),
-                  title: Text(nome),
-                  subtitle: Text('CPF: $cpf'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.orange),
-                        onPressed: () => _editarTutor(context, tutorDoc.id, tutor),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deletarTutor(context, tutorDoc.id),
-                      ),
-                    ],
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    leading: const Icon(Icons.person, color: Colors.blue),
+                    title: Text(nome, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('CPF: $cpf'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.orange),
+                          onPressed: () => _editarTutor(context, tutorDoc.id, tutor),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _confirmarDelecao(context, tutorDoc.id, nome),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -56,18 +63,39 @@ class ListarTutoresPage extends StatelessWidget {
     );
   }
 
-  /// Função para deletar o tutor do Firestore
-  void _deletarTutor(BuildContext context, String tutorId) async {
-    try {
-      await FirebaseFirestore.instance.collection('tutores').doc(tutorId).delete();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tutor deletado com sucesso!')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao deletar o tutor: $e')),
-      );
-    }
+  /// Função para confirmar a remoção do tutor
+  void _confirmarDelecao(BuildContext context, String tutorId, String nome) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Confirmar remoção'),
+          content: Text('Confirmar remoção do tutor "$nome" do sistema?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance.collection('tutores').doc(tutorId).delete();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Tutor removido com sucesso!')),
+                  );
+                  Navigator.pop(context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erro ao remover o tutor: $e')),
+                  );
+                }
+              },
+              child: const Text('Remover'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// Função para editar as informações do tutor

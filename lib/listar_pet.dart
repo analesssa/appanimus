@@ -34,25 +34,45 @@ class ListarPetsPage extends StatelessWidget {
               final petDoc = pets[index];
               final pet = petDoc.data() as Map<String, dynamic>;
               final nomePet = pet['nomePet'] ?? 'Sem Nome';
-              final nomeDono = pet['nomeDono'] ?? 'Sem Tutor';
+              final tutorId = pet['tutorId']; // ID do tutor
               final racaPet = pet['racaPet'] ?? 'Raça desconhecida';
 
-              return ListTile(
-                title: Text('🐾 $nomePet'),
-                subtitle: Text('Tutor: $nomeDono | Raça: $racaPet'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.orange),
-                      onPressed: () => _editarPet(context, petDoc.id, pet),
+              return FutureBuilder<DocumentSnapshot>(
+                future: FirebaseFirestore.instance.collection('tutores').doc(tutorId).get(),
+                builder: (context, tutorSnapshot) {
+                  if (tutorSnapshot.connectionState == ConnectionState.waiting) {
+                    return const ListTile(
+                      title: Text('🐾 Carregando pet...'),
+                    );
+                  }
+
+                  if (tutorSnapshot.hasError) {
+                    return const ListTile(
+                      title: Text('🐾 Erro ao carregar tutor.'),
+                    );
+                  }
+
+                  final tutor = tutorSnapshot.data?.data() as Map<String, dynamic>?;
+                  final nomeDono = tutor?['nome'] ?? 'Sem Tutor'; // Nome do tutor
+
+                  return ListTile(
+                    title: Text('🐾 $nomePet'),
+                    subtitle: Text('Tutor: $nomeDono | Raça: $racaPet'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.orange),
+                          onPressed: () => _editarPet(context, petDoc.id, pet),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _confirmarDelecao(context, petDoc.id),
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => _deletarPet(context, petDoc.id),
-                    ),
-                  ],
-                ),
+                  );
+                },
               );
             },
           );
@@ -61,32 +81,59 @@ class ListarPetsPage extends StatelessWidget {
     );
   }
 
-  /// Função para deletar o pet do Firestore
- Future<void> _deletarPet(BuildContext context, String petsId) async {
-  if (petsId.isEmpty) {
-    print('O ID do pet está vazio! Verifique o valor passado.');
-    return;
+  // Função para confirmar a exclusão do pet com diálogo
+  Future<void> _confirmarDelecao(BuildContext context, String petId) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Excluir Pet'),
+          content: const Text('Você tem certeza que deseja excluir este pet? Esta ação não pode ser desfeita.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Fecha o diálogo se o usuário cancelar
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(context); // Fecha o diálogo
+                await _deletarPet(context, petId); // Deleta o pet
+              },
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  try {
-    await FirebaseFirestore.instance.collection('pets').doc(petsId).delete();
-
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pet deletado com sucesso!')),
-      );
+  // Função para deletar o pet
+  Future<void> _deletarPet(BuildContext context, String petId) async {
+    if (petId.isEmpty) {
+      print('O ID do pet está vazio! Verifique o valor passado.');
+      return;
     }
-  } catch (e) {
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao deletar o pet: $e')),
-      );
+
+    try {
+      await FirebaseFirestore.instance.collection('pets').doc(petId).delete();
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Pet deletado com sucesso!')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao deletar o pet: $e')),
+        );
+      }
     }
   }
-}
 
-
-  /// Função para editar as informações do pet
+  // Função para editar o pet
   Future<void> _editarPet(BuildContext context, String petId, Map<String, dynamic> pet) async {
     final nomeController = TextEditingController(text: pet['nomePet']);
     final donoController = TextEditingController(text: pet['nomeDono']);

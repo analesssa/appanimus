@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'tela_principal.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'tela_principal.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
@@ -13,10 +13,9 @@ class TelaCadastro extends StatefulWidget {
 class _TelaCadastroState extends State<TelaCadastro> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-  final TextEditingController _confirmarSenhaController =
-      TextEditingController();
-  final TextEditingController _nomeUsuarioController = TextEditingController(); // Campo de nome de usuário
-  
+  final TextEditingController _confirmarSenhaController = TextEditingController();
+  final TextEditingController _nomeUsuarioController = TextEditingController();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isSenhaVisivel = false;
   bool _isConfirmarSenhaVisivel = false;
@@ -26,7 +25,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
     final String email = _emailController.text;
     final String senha = _senhaController.text;
     final String confirmarSenha = _confirmarSenhaController.text;
-    final String nomeUsuario = _nomeUsuarioController.text; // Nome de usuário
+    final String nomeUsuario = _nomeUsuarioController.text;
 
     if (email.isEmpty || senha.isEmpty || confirmarSenha.isEmpty || nomeUsuario.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -38,8 +37,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
       );
     } else if (senha.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('A senha deve ter pelo menos 6 caracteres')),
+        const SnackBar(content: Text('A senha deve ter pelo menos 6 caracteres')),
       );
     } else if (senha != confirmarSenha) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,8 +45,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
       );
     } else {
       try {
-        // Tenta criar o usuário com email e senha no Firebase
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        // Verifica se o email já está em uso
+        final userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: senha,
         );
@@ -57,15 +55,11 @@ class _TelaCadastroState extends State<TelaCadastro> {
         User? user = userCredential.user;
 
         if (user != null) {
-          // Salvar dados no Firestore
+          // Salvar dados no Firestore com nome de usuário
           await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
             'nomeUsuario': nomeUsuario,
             'email': email,
             'dataRegistro': Timestamp.now(),
-            'nomeCompleto': null,
-            'dataNascimento': null,
-            'genero': null,
-            'bio': null,
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -99,31 +93,28 @@ class _TelaCadastroState extends State<TelaCadastro> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Certifique-se de que o caminho da imagem está correto
               Image.asset(
                 'lib/assets/animuslogo.jpg',
                 height: 200,
                 width: 200,
               ),
               const SizedBox(height: 24),
-              // Campo para o nome de usuário
               SizedBox(
                 width: 300,
                 child: TextField(
-                  controller: _nomeUsuarioController, // Controle de nome de usuário
+                  controller: _nomeUsuarioController,
                   decoration: const InputDecoration(
                     labelText: 'Nome de Usuário',
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              // Campo para o email
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -131,17 +122,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
               const SizedBox(height: 16),
-              // Campo para a senha
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -150,10 +140,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Senha',
                     border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -171,7 +161,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Campo para confirmar senha
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -180,10 +169,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Confirmar Senha',
                     border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                     focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black), // Borda preta ao focar
+                      borderSide: BorderSide(color: Colors.black),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -201,7 +190,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Botão de cadastro
               SizedBox(
                 width: 300,
                 child: ElevatedButton(
