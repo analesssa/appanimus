@@ -58,7 +58,7 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(60), // Reduzindo a altura do AppBar
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
@@ -66,15 +66,11 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
           ),
           child: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF81D4FA), Color(0xFF4FC3F7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Color(0xFFFFF9C4), // Cor de fundo Amarelo Bebê
             ),
             child: AppBar(
               title: const Text('Cadastrar Pet 🤖'),
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.transparent, // Para manter a transparência
               elevation: 0,
               centerTitle: true,
             ),
@@ -100,12 +96,16 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
                   // Campo de dropdown para o tutor
                   _buildDropdownTutor(),
 
+                  const SizedBox(height: 16),
+
                   // Outros campos
                   _buildTextField(_nomePetController, 'Nome do Pet 🦾'),
                   _buildDropdownEspecie(),
                   _buildDropdownRaca(),
-                  _buildTextField(_dataNascimentoPetController, 'Data de Nascimento 🗓️'),
+                  _buildDatePickerField(),
                   const SizedBox(height: 16),
+
+                  // Botões
                   ElevatedButton(
                     onPressed: _cadastrarPet,
                     style: ElevatedButton.styleFrom(
@@ -143,17 +143,38 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
   InputDecoration _inputDecoration(String label) {
     return InputDecoration(
       labelText: label,
+      labelStyle: TextStyle(fontWeight: FontWeight.w600, color: Colors.black), // Aumenta o peso da fonte
       filled: true,
       fillColor: Colors.white,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: const BorderSide(color: Colors.black, width: 2), // Borda mais grossa e escura
+      ),
       contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     );
   }
 
-  // Função para construir o Dropdown de Tutor com nome e CPF
-  Widget _buildDropdownTutor() {
+  // Função para criar o campo de texto com estilo uniforme
+  Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        child: TextFormField(
+          controller: controller,
+          decoration: _inputDecoration(label),
+          keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+        ),
+      ),
+    );
+  }
+
+  // Função para construir o Dropdown de Tutor com nome e CPF
+ Widget _buildDropdownTutor() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura do dropdown
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('tutores').snapshots(),
         builder: (context, snapshot) {
@@ -184,36 +205,45 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
               final displayText = '$tutorName - CPF: $tutorCpf'; // Exibindo nome e CPF
               return DropdownMenuItem<String>(
                 value: doc.id,
-                child: Text(displayText),
+                child: Align(
+                  alignment: Alignment.center, // Centraliza o texto do item
+                  child: Text(displayText),
+                ),
               );
             }).toList(),
           );
         },
       ),
-    );
-  }
-
+    ),
+  );
+}
   // Função para construir o Dropdown de Espécie com estilo uniforme
   Widget _buildDropdownEspecie() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropdownButtonFormField<String>(
-        value: _selectedEspecie,
-        hint: const Text('Selecione a espécie do Pet'),
-        isExpanded: true,
-        decoration: _inputDecoration('Espécie do Pet'),
-        onChanged: (value) {
-          setState(() {
-            _selectedEspecie = value;
-            _selectedRaca = null; // Reseta a raça quando a espécie é alterada
-          });
-        },
-        items: _especies.map((String especie) {
-          return DropdownMenuItem<String>(
-            value: especie,
-            child: Text(especie),
-          );
-        }).toList(),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        child: DropdownButtonFormField<String>(
+          value: _selectedEspecie,
+          hint: const Text('Selecione a espécie do Pet'),
+          isExpanded: true,
+          decoration: _inputDecoration('Espécie do Pet'),
+          onChanged: (value) {
+            setState(() {
+              _selectedEspecie = value;
+              _selectedRaca = null; // Reseta a raça quando a espécie é alterada
+            });
+          },
+          items: _especies.map((String especie) {
+            return DropdownMenuItem<String>(
+              value: especie,
+              child: Align(
+                alignment: Alignment.center, // Centraliza o texto
+                child: Text(especie),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
@@ -230,34 +260,57 @@ class _CadastrarPetPageState extends State<CadastrarPetPage> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: DropdownButtonFormField<String>(
-        value: _selectedRaca,
-        hint: const Text('Selecione a raça do Pet'),
-        isExpanded: true,
-        decoration: _inputDecoration('Raça do Pet'),
-        onChanged: (value) {
-          setState(() {
-            _selectedRaca = value;
-          });
-        },
-        items: racas.map((String raca) {
-          return DropdownMenuItem<String>(
-            value: raca,
-            child: Text(raca),
-          );
-        }).toList(),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        child: DropdownButtonFormField<String>(
+          value: _selectedRaca,
+          hint: const Text('Selecione a raça do Pet'),
+          isExpanded: true,
+          decoration: _inputDecoration('Raça do Pet'),
+          onChanged: (value) {
+            setState(() {
+              _selectedRaca = value;
+            });
+          },
+          items: racas.map((String raca) {
+            return DropdownMenuItem<String>(
+              value: raca,
+              child: Align(
+                alignment: Alignment.center, // Centraliza o texto
+                child: Text(raca),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
 
-  // Função para criar o campo de texto com estilo uniforme
-  Widget _buildTextField(TextEditingController controller, String label, {bool isNumber = false}) {
+  // Função para o campo de data com o DatePicker
+  Widget _buildDatePickerField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        controller: controller,
-        decoration: _inputDecoration(label),
-        keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8, // Definindo a largura
+        child: TextFormField(
+          controller: _dataNascimentoPetController,
+          decoration: _inputDecoration('Data de Nascimento 🗓️'),
+          keyboardType: TextInputType.none,
+          onTap: () async {
+            FocusScope.of(context).requestFocus(FocusNode());
+            DateTime? selectedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1900),
+              lastDate: DateTime.now(),
+            );
+            if (selectedDate != null) {
+              setState(() {
+                _dataNascimentoPetController.text = selectedDate.toLocal().toString().split(' ')[0]; // Formata a data
+              });
+            }
+          },
+        ),
       ),
     );
   }

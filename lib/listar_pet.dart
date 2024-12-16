@@ -9,74 +9,118 @@ class ListarPetsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pets Cadastrados 🐾'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color(0xFFFFE4B5), // Amarelo bebê
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('pets').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/fundobase.png'),
+            fit: BoxFit.cover, // Garante que a imagem ocupe toda a tela
+          ),
+        ),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('pets').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (snapshot.hasError) {
-            return const Center(child: Text('Erro ao carregar os dados.'));
-          }
+            if (snapshot.hasError) {
+              return const Center(child: Text('Erro ao carregar os dados.'));
+            }
 
-          final pets = snapshot.data?.docs ?? [];
+            final pets = snapshot.data?.docs ?? [];
 
-          if (pets.isEmpty) {
-            return const Center(child: Text('Nenhum pet cadastrado ainda.'));
-          }
+            if (pets.isEmpty) {
+              return const Center(child: Text('Nenhum pet cadastrado ainda.'));
+            }
 
-          return ListView.builder(
-            itemCount: pets.length,
-            itemBuilder: (context, index) {
-              final petDoc = pets[index];
-              final pet = petDoc.data() as Map<String, dynamic>;
-              final nomePet = pet['nomePet'] ?? 'Sem Nome';
-              final tutorId = pet['tutorId']; // ID do tutor
-              final racaPet = pet['racaPet'] ?? 'Raça desconhecida';
+            return ListView.builder(
+              itemCount: pets.length,
+              itemBuilder: (context, index) {
+                final petDoc = pets[index];
+                final pet = petDoc.data() as Map<String, dynamic>;
+                final nomePet = pet['nomePet'] ?? 'Sem Nome';
+                final tutorId = pet['tutorId']; // ID do tutor
+                final racaPet = pet['racaPet'] ?? 'Raça desconhecida';
 
-              return FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance.collection('tutores').doc(tutorId).get(),
-                builder: (context, tutorSnapshot) {
-                  if (tutorSnapshot.connectionState == ConnectionState.waiting) {
-                    return const ListTile(
-                      title: Text('🐾 Carregando pet...'),
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance.collection('tutores').doc(tutorId).get(),
+                  builder: (context, tutorSnapshot) {
+                    if (tutorSnapshot.connectionState == ConnectionState.waiting) {
+                      return const ListTile(
+                        title: Text('🐾 Carregando pet...'),
+                      );
+                    }
+
+                    if (tutorSnapshot.hasError) {
+                      return const ListTile(
+                        title: Text('🐾 Erro ao carregar tutor.'),
+                      );
+                    }
+
+                    final tutor = tutorSnapshot.data?.data() as Map<String, dynamic>?;
+                    final nomeDono = tutor?['nome'] ?? 'Sem Tutor'; // Nome do tutor
+
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Menos padding
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8), // Cor de fundo leve
+                        borderRadius: BorderRadius.circular(16), // Borda arredondada
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            offset: Offset(0, 2),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Título com o nome do pet
+                          Text(
+                            '🐾 $nomePet',
+                            style: const TextStyle(
+                              fontSize: 20, // Tamanho maior da fonte
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87, // Cor mais escura
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          // Subtítulo com informações do tutor e raça
+                          Text(
+                            'Tutor: $nomeDono | Raça: $racaPet',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54, // Cor mais escura e suave
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          // Botões de editar e excluir
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.orange),
+                                onPressed: () => _editarPet(context, petDoc.id, pet),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () => _confirmarDelecao(context, petDoc.id),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     );
-                  }
-
-                  if (tutorSnapshot.hasError) {
-                    return const ListTile(
-                      title: Text('🐾 Erro ao carregar tutor.'),
-                    );
-                  }
-
-                  final tutor = tutorSnapshot.data?.data() as Map<String, dynamic>?;
-                  final nomeDono = tutor?['nome'] ?? 'Sem Tutor'; // Nome do tutor
-
-                  return ListTile(
-                    title: Text('🐾 $nomePet'),
-                    subtitle: Text('Tutor: $nomeDono | Raça: $racaPet'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.orange),
-                          onPressed: () => _editarPet(context, petDoc.id, pet),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _confirmarDelecao(context, petDoc.id),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

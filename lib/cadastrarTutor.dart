@@ -25,26 +25,19 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80),
+        preferredSize: Size.fromHeight(40git congi),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(30),
             bottomRight: Radius.circular(30),
           ),
           child: Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF81D4FA),
-                  Color(0xFF4FC3F7),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              color: Color(0xFFFFF9C4), // Amarelo bebê para o AppBar
             ),
             child: AppBar(
               title: const Text('Cadastrar Tutor 🧑‍⚕️'),
-              backgroundColor: Colors.transparent,
+              backgroundColor: Color(0xFFFFF9C4), // Amarelo bebê para o AppBar
               elevation: 0,
               centerTitle: true,
             ),
@@ -52,14 +45,10 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
         ),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xFFFFF9C4),
-              Color(0xFFFFE082),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('lib/assets/fundobase.png'), // Adicionando a imagem de fundo
+            fit: BoxFit.cover, // Faz a imagem cobrir toda a tela
           ),
         ),
         child: Center(
@@ -136,7 +125,7 @@ class _CadastrarTutorPageState extends State<CadastrarTutorPage> {
         decoration: InputDecoration(
           labelText: label,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Colors.white.withOpacity(0.8), // Fundo branco com transparência
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
           ),
