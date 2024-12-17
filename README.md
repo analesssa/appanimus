@@ -1,6 +1,6 @@
 ## ANIMUS - GESTOR DE PET
 
-
+---
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=flutter&message=framework&color=blue&style=for-the-badge&logo=flutter"/>
   <img src="https://img.shields.io/static/v1?label=Firebase&message=deploy&color=blue&style=for-the-badge&logo=firebase"/>
